@@ -25,21 +25,25 @@ def voxels():
     return shape
 
 def basic_geometry():
-    box_functions = [makeRectBeam, makeCubeBeam, makeTriangleBeam,makeNothingBox]
-    cylind_functions = [makeCylindBeam, makeHollowCylindBeam, makeHollowCone, makeEye, makeNothingCylind]
+    box_functions = [makeRectBeam, makeCubeBeam, makeTriangleBeam,makeNothingBox, makeCylindBeam, makeHollowCylindBeam, makeHollowCone, makeEye]
+    # cylind_functions = [makeCylindBeam, makeHollowCylindBeam, makeHollowCone, makeEye, makeNothingCylind]
     shape_list = []
     for bf in box_functions:
-        for cf in cylind_functions:
+        for cf in box_functions:
             for bf2 in box_functions:
-                shape = union()(
-                    translate([-2, -3, 0])(
-                    bf(4, 6, 5)),
-                    translate([0, 0, 5])(
-                    cf(4, 5)),
-                    translate([-2, -3, 10])(
-                        bf2(4, 6, 5))
-                )
-                shape_list.append(shape)
+                for i in range(2):
+                    shape = union()(
+                        # translate([-2, -3, 0])(
+                        bf(5, 4, 5),
+                        translate([0, 0, 5])(
+                        cf(4, 3, 5)),
+                        translate([0, 0, 10])(
+                        bf2(5, 4, 5))
+                    )
+                    if i == 0:
+                        shapeInner = cylinder(r=0.5, h=20, center=False)
+                        shape = shape - shapeInner
+                    shape_list.append(shape)
 
     return shape_list
 

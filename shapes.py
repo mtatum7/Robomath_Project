@@ -11,7 +11,7 @@ SEGMENTS = 48
 
 
 def makeRectBeam(length, width, height):
-    shape = cube(size=[length, width, height], center=False)
+    shape = translate([-length/2, -width/2, 0])(cube(size=[length, width, height], center=False))
     return shape
 
 def makeNothingBox(length, width, height):
@@ -19,15 +19,15 @@ def makeNothingBox(length, width, height):
     return shape
 
 def makeCubeBeam(width, length, thickness):
-    shape = cube(size=[width, width, length], center=False)
+    shape = translate([-width/2, -width/2, 0])(cube(size=[width, width, length], center=False))
     return shape
 
 
-def makeCylindBeam(radius, length):
+def makeCylindBeam(radius, length, height):
     shape = cylinder(r=radius, h=length, center=False)
     return shape
 
-def makeNothingCylind(radius, length):
+def makeNothingCylind(radius, length, height):
     shape = cylinder(r=0, h=0, center=False)
     return shape
 
@@ -57,7 +57,7 @@ def makeHollowCubeBeam(width, length, thickness):
     return shapeTotal - shapeInner
 
 
-def makeHollowCylindBeam(width, length):
+def makeHollowCylindBeam(width, length, height):
     radius = width / 2
     shapeTotal = cylinder(r=radius, r2=radius, h=length, center=False)
     # Holes will be punched in from the top
@@ -70,7 +70,7 @@ def makeHollowCylindBeam(width, length):
     return shapeTotal - shapeInner
 
 
-def makeEye(radius, length):
+def makeEye(radius, length, height):
     shapeTotal = translate([0, 0, 1])( cylinder(r=radius, r2=0, h=length+2, center=False))
 
     # Holes will be punched in from the top
@@ -83,7 +83,7 @@ def makeEye(radius, length):
     return shapeTotal - shapeInner
 
 
-def makeHollowCone(radius, length):
+def makeHollowCone(radius, length, height):
     shapeTotal = cylinder(r=radius, r2=0, h=length, center=False)
 
     # Holes will be punched in from the top
@@ -100,7 +100,7 @@ def makeHollowCone(radius, length):
 def makeTriangleBeam(beamWidth, length, dummy):
     # Beam shaped like a solid triangle
     shape = getEquilateral(beamWidth)
-    shape = linear_extrude(height=length, center=False, convexity=10, twist=0, slices=1)(shape)
+    shape = translate([-beamWidth/2, -length/2, 0])(linear_extrude(height=length, center=False, convexity=10, twist=0, slices=1)(shape))
 
     return shape
 
